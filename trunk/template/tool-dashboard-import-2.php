@@ -15,7 +15,7 @@
 							<th>Post Type</th>
 							<th>Posts Count</th>
 							<th>Convert to Post type...</th>
-							<th></th>
+							<th>Update Posts if Field Math</th>
 						</tr>
 						</thead>
 						<tbody id="the-list">
@@ -42,7 +42,14 @@
 											}
 
 										?></select></td>
-								<td></td>
+								<td>
+									<select name="replace_key">
+										<option value="">- not update -</option>
+										<option value="ID">ID</option>
+										<option value="post_title">post_title</option>
+										<option value="post_date">post_date</option>
+									</select>
+								</td>
 							</tr>
 							<?php
 						} ?>
@@ -64,6 +71,9 @@
 				</form>
 			</div>
 		</div>
+		<script>
+
+		</script>
 	<?php else: ?>
 		<div class="wrap"><h1>File Error...</h1></div>
 	<?php endif;

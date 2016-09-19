@@ -5,7 +5,7 @@
 			<h2>1 / 3 - Select JSON data and start import...</h2>
 			<p>After upload file you must select where (wath post type) you want import posts</p>
 			<p><input type="file" name="file_data"/></p>
-			<button class="button button-primary" type="submit">Uploda</button>
+			<button class="button button-primary" type="submit">Upload</button>
 		</form>
 	</div>
 </div>

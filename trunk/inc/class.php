@@ -205,9 +205,9 @@
 			if( $this->is_exist() ){
 				if( strpos( $filepath, HW_EXPORT_POSTS_DIR_UPLOAD ) === false ){
 					wp_mkdir_p( HW_EXPORT_POSTS_DIR_UPLOAD );
-					$newPath = HW_EXPORT_POSTS_DIR_UPLOAD . '/' . basename( $filepath ) . '.json';
+					$newPath = HW_EXPORT_POSTS_DIR_UPLOAD . '/' . microtime( true ) . '.json';
 					if( copy( $filepath, $newPath ) ){
-						$this->path = HW_EXPORT_POSTS_DIR_UPLOAD . '/' . basename( $filepath ) . '.json';
+						$this->path = $newPath;
 					}
 				}
 				$this->content = file_get_contents( $this->path );
@@ -216,21 +216,41 @@
 		}
 
 
+		/**
+		 * @return bool
+		 */
 		public function is_exist(){
 			return file_exists( $this->path ) && is_file( $this->path ) && is_readable( $this->path );
 		}
 
 
+		/**
+		 * @return string
+		 */
+		public function basename(){
+			return basename( $this->path );
+		}
+
+
+		/**
+		 * @return int
+		 */
 		public function size(){
 			return filesize( $this->path );
 		}
 
 
+		/**
+		 * @return array|mixed|object
+		 */
 		public function data(){
 			return $this->data;
 		}
 
 
+		/**
+		 * @return array
+		 */
 		public function post_types(){
 			return array_keys( $this->data() );
 		}
