@@ -12,3 +12,7 @@
 		define( 'HW_EXPORT_POSTS_DIR_TEMPLATE', HW_EXPORT_POSTS_DIR . '/template' );
 	if( !defined( 'HW_EXPORT_POSTS_SLUG_PAGE' ) )
 		define( 'HW_EXPORT_POSTS_SLUG_PAGE', 'hiweb-export-posts' );
+	if( !defined( 'HW_EXPORT_POSTS_DIR_UPLOAD' ) ){
+		$upload_dir = wp_upload_dir();
+		define( 'HW_EXPORT_POSTS_DIR_UPLOAD', $upload_dir['basedir'] . '/' . HW_EXPORT_POSTS_SLUG_PAGE );
+	}
