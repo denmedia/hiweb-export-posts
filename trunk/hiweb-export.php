@@ -2,7 +2,7 @@
 	/**
 	 * Plugin Name: hiWeb Export Posts
 	 * Description: Export Selected Posts in to JSON file and Import in to other WordPress Site.
-	 * Version: 0.1.0.0
+	 * Version: 0.2.0.0 - alpha
 	 * Author: Den Media
 	 * Author URI: http://hiweb.moscow
 	 */

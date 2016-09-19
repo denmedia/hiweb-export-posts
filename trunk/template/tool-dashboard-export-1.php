@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h1><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ) ?>" class="button">←</a> hiWeb Export Tool</h1>
+	<h1><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ) ?>" class="button">←</a> hiWeb Export Tool → Select Export Posts</h1>
 	<p class="describe">Select Post Types For Export...</p>
 	<form action="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts' ) ?>" method="post">
 		<table class="wp-list-table widefat fixed striped pages">
@@ -48,7 +48,8 @@
 							?>
 						</td>
 						<td style="text-align: right">
-							<a href="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts&pt=' . $post_type_name ) ?>" class="button button-small" target="_blank">Save JSON to PC...</a>
+							<a href="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts&pt=' . $post_type_name ) ?>" class="button button-small" target="_blank">Open JSON</a>
+							<a href="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts_download&pt=' . $post_type_name ) ?>" class="button button-small" target="_blank">Download JSON</a>
 						</td>
 					</tr>
 					<?php
