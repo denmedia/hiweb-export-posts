@@ -417,7 +417,7 @@
 	class hw_export_hooks{
 		
 		public function admin_menu(){
-			add_submenu_page( 'tools.php', 'hiWeb Export Post', 'hiWeb Export Posts', 'publish_posts', HW_EXPORT_POSTS_SLUG_PAGE, array( $this, 'dashboard' ) );
+			add_submenu_page( 'tools.php', 'hiWeb Export Post', 'hiWeb Export / Import', 'publish_posts', HW_EXPORT_POSTS_SLUG_PAGE, array( $this, 'dashboard' ) );
 		}
 		
 		
