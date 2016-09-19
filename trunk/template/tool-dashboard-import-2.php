@@ -1,6 +1,5 @@
 <?php
 
-	hiweb()->console( array($_GET,$_POST) );//todo
 	$file = hiweb_export()->file( isset( $_GET['file_data'] ) ? $_GET['file_data'] : ( isset( $_FILES['file_data']['tmp_name'] ) ? $_FILES['file_data']['tmp_name'] : false ) );
 	if( $file->is_exist() ):
 		?>
