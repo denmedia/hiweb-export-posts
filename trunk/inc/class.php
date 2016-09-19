@@ -354,7 +354,19 @@
 					////
 					if( is_array( $data ) ){
 						////////////
-						if( isset( $data['posts'] ) && is_array( $data['posts'] ) )
+						if( isset( $data['posts'] ) && is_array( $data['posts'] ) ){
+
+							///TAXONOMIES CREATE
+							if( isset( $data['terms'] ) && is_array( $data['terms'] ) ){
+								foreach( $data['terms'] as $taxonomy_name => $terms ){
+									foreach( $terms as $term ){
+										wp_insert_term( $term['Name'], $sett['taxonomies'][ $taxonomy_name ], array(
+											'description' => $term['description'], 'parent' => $term['parent'], 'slug' => $term['slug']
+										) );
+									}
+								}
+							}
+
 							foreach( $data['posts'] as $post_id => $post_data ){
 								$post = $post_data['post'];
 								$meta = $post_data['meta'];
@@ -384,6 +396,7 @@
 									$R['error'][ $newId ] = false;
 								}
 							}
+						}
 						////////////
 					}
 					return $R;
