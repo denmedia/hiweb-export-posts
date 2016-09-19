@@ -4,9 +4,11 @@
 	if( $file->is_exist() ):
 		?>
 		<div class="wrap">
-			<h1><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ) ?>" class="button">←</a> hiWeb Import Tool → Select Post Types and Setup <small>(step 2 of 3)</small></h1>
+			<h1><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ) ?>" class="button">←</a> hiWeb Import Tool → Select Post Types and Setup
+				<small>(step 2 of 3)</small>
+			</h1>
 			<div>
-				<form action="<?php echo admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE . '&mod=import&file_data='.$file->basename() ) ?>" method="post">
+				<form action="<?php echo admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE . '&mod=import&file_data=' . $file->basename() ) ?>" method="post">
 
 					<table class="wp-list-table widefat fixed striped pages">
 						<thead>
@@ -44,7 +46,7 @@
 									</select>-->
 								</td>
 								<td>
-									<select name="pts[<?php echo $post_type_name ?>][post_type]"><?php
+									<select data-change="post_type" name="pts[<?php echo $post_type_name ?>][post_type]"><?php
 
 											foreach( hiweb_export()->post_types() as $to_type => $ty_type_obj ){
 												$selected = $post_type_name == $to_type ? 'selected' : '';
@@ -57,7 +59,8 @@
 								<td>
 									<?php foreach( $file->taxonomies( $post_type_name ) as $taxonomy_name => $taxonomy ){
 										?>
-										<p><?php echo $taxonomy['label'] ?> → <select  name="pts[<?php echo $post_type_name ?>][taxonomies][<?php echo $taxonomy_name ?>]" id="taxonomy_<?php echo $post_type_name . '_' . $taxonomy_name ?>">
+										<p><?php echo $taxonomy['label'] ?> → <select data-reload="post_type" name="pts[<?php echo $post_type_name ?>][taxonomies][<?php echo $taxonomy_name ?>]"
+										                                              id="taxonomy_<?php echo $post_type_name . '_' . $taxonomy_name ?>">
 											<?php echo hiweb_export()->html()->select_options_taxonomies(); ?>
 										</select></p><?php
 									} ?>
@@ -86,9 +89,24 @@
 		<script>
 			jQuery(document).ready(function ($) {
 				window.history.pushState("", "", 'tools.php?page=<?php echo HW_EXPORT_POSTS_SLUG_PAGE ?>&mod=import&file_data=<?php echo $file->basename() ?>');
-				$('select[name="dest_post_type"]').change(function () {
-					var post_type_name = $(this).closest('tr[data-post-type]').attr('data-post-type');
-					$.ajax({});
+				$('select[data-change="post_type"]').change(function () {
+					var tr = $(this).closest('tr[data-post-type]');
+					var post_type_name = tr.attr('data-post-type');
+					tr.find('select[data-reload="post_type"]').fadeOut();
+					$.ajax({
+						url: ajaxurl,
+						type: 'post',
+						data: {action: 'hw_export_posts_html', post_type_name: tr.find(('select[data-change="post_type"]')).val()},
+						success: function (data) {
+							tr.find('select[data-reload="post_type"]').fadeIn().html(data);
+						},
+						error: function (data) {
+							console.warn(data);
+						},
+						anyway: function () {
+							tr.find('select[data-reload="post_type"]').fadeIn();
+						}
+					});
 				});
 			});
 		</script>

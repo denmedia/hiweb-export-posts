@@ -175,6 +175,8 @@
 
 
 		public function data(){
+			ini_set('memory_limit', '512M');
+			ini_set('max_execution_time', '180');
 			$R = array(
 				'posts' => array(), 'post_type' => $this->get(), 'taxonomies' => $this->taxonomies(), 'terms' => $this->taxonomy_terms()
 			);
@@ -341,6 +343,8 @@
 
 
 		public function process( $settings ){
+			ini_set('memory_limit', '512M');
+			ini_set('max_execution_time', '180');
 			global $wpdb;
 			$R = array(
 				'success' => array(), 'error' => array(), 'taxonomies' => array(), 'meta' => array()
@@ -363,7 +367,9 @@
 							///CREATE TERMS
 							if( isset( $data['terms'] ) && is_array( $data['terms'] ) ){
 								foreach( $data['terms'] as $taxonomy_name => $terms ){
+									if($sett['taxonomies'][ $taxonomy_name ] == '') continue;
 									///REMOVE OLD
+									ksort($terms);
 									if( isset( $sett['remove'] ) && strtolower( $sett['remove'] ) == 'on' ){
 										$removeTerms = get_terms( array( 'taxonomy' => $sett['taxonomies'][ $taxonomy_name ], 'hide_empty' => false ) );
 										foreach( $removeTerms as $value ){
@@ -375,9 +381,16 @@
 									///MAKE NEW
 									$termsIds = array();
 									foreach( $terms as $term ){
-										$termsIds[ $term['name'] ] = wp_insert_term( $term['name'], $sett['taxonomies'][ $taxonomy_name ], array(
-											'description' => $term['description'], /*'parent' => $term['parent'], */'slug' => $term['slug']
+										if( trim( $term['parent'] ) != '' && $term['parent'] != '0' ){
+											$parentSlug = $terms[ $term['parent'] ]['slug'];
+											if( isset( $termsIds[ $parentSlug ] ) )
+												$term['parent'] = $termsIds[ $parentSlug ];
+										}
+										$insert_term = wp_insert_term( $term['name'], $sett['taxonomies'][ $taxonomy_name ], array(
+											'description' => $term['description'], 'parent' => $term['parent'], 'slug' => $term['slug']
 										) );
+										if( is_array($insert_term) )
+											$termsIds[ $term['slug'] ] = $insert_term['term_id'];
 									}
 								}
 							}
@@ -516,6 +529,12 @@
 			header( 'Pragma: public' );
 			header( 'Content-Length: ' . strlen( $content ) );
 			echo $content;
+			wp_die();
+		}
+
+
+		public function html(){
+			echo hiweb_export()->html()->select_options_taxonomies($_POST['post_type_name']);
 			wp_die();
 		}
 		
