@@ -374,16 +374,11 @@
 									);
 									foreach( $tax as $taxonomy => $terms ){
 										if( isset( $sett['taxonomies'][ $taxonomy ] ) && trim( $sett['taxonomies'][ $taxonomy ] ) != '' ){
-											if( wp_set_object_terms( $newId, $terms, $sett['taxonomies'][ $taxonomy ] ) ){
-												$R['taxonomies'][ $sett['taxonomies'][ $taxonomy ] ] = isset( $R['taxonomies'][ $sett['taxonomies'][ $taxonomy ] ] ) ? array_merge( $R['taxonomies'][ $sett['taxonomies'][ $taxonomy ] ], $terms ) : $terms;
-											}
+											wp_set_object_terms( $newId, $terms, $sett['taxonomies'][ $taxonomy ] );
 										}
 									}
-									$R['taxonomies'][ $sett['taxonomies'][ $taxonomy ] ] = array_unique($R['taxonomies'][ $sett['taxonomies'][ $taxonomy ] ]);
 									foreach( $meta as $metaKey => $metaValue ){
-										if( update_post_meta( $newId, $metaKey, $metaValue[0] ) ){
-											$R['meta'][ $metaKey ] = isset( $R['meta'][ $metaKey ] ) ? $R['meta'][ $metaKey ] + 1 : 1;
-										}
+										update_post_meta( $newId, $metaKey, $metaValue[0] );
 									}
 								}else{
 									$R['error'][ $newId ] = false;
@@ -392,7 +387,8 @@
 						////////////
 					}
 					return $R;
-				}else return false;
+				}
+			return false;
 		}
 
 
