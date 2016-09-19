@@ -154,7 +154,11 @@
 					$term_args = array(
 						'taxonomy' => $taxonomy_name, 'hide_empty' => false,
 					);
-					$R[ $taxonomy_name ] = get_terms( $term_args );
+					$terms = get_terms( $term_args );
+					if( is_array( $terms ) )
+						foreach( $terms as $term ){
+							$R[ $taxonomy_name ][ $term->term_id ] = $term;
+						}
 				}
 			return $R;
 		}
@@ -356,12 +360,23 @@
 						////////////
 						if( isset( $data['posts'] ) && is_array( $data['posts'] ) ){
 
-							///TAXONOMIES CREATE
+							///CREATE TERMS
 							if( isset( $data['terms'] ) && is_array( $data['terms'] ) ){
 								foreach( $data['terms'] as $taxonomy_name => $terms ){
+									///REMOVE OLD
+									if( isset( $sett['remove'] ) && strtolower( $sett['remove'] ) == 'on' ){
+										$removeTerms = get_terms( array( 'taxonomy' => $sett['taxonomies'][ $taxonomy_name ], 'hide_empty' => false ) );
+										foreach( $removeTerms as $value ){
+											if( $value instanceof WP_Term ){
+												wp_delete_term( $value->term_id, $sett['taxonomies'][ $taxonomy_name ] );
+											}
+										}
+									}
+									///MAKE NEW
+									$termsIds = array();
 									foreach( $terms as $term ){
-										wp_insert_term( $term['Name'], $sett['taxonomies'][ $taxonomy_name ], array(
-											'description' => $term['description'], 'parent' => $term['parent'], 'slug' => $term['slug']
+										$termsIds[ $term['name'] ] = wp_insert_term( $term['name'], $sett['taxonomies'][ $taxonomy_name ], array(
+											'description' => $term['description'], /*'parent' => $term['parent'], */'slug' => $term['slug']
 										) );
 									}
 								}
@@ -390,7 +405,7 @@
 										}
 									}
 									foreach( $meta as $metaKey => $metaValue ){
-										update_post_meta( $newId, $metaKey, $metaValue[0] );
+										update_post_meta( $newId, $metaKey, $metaValue );
 									}
 								}else{
 									$R['error'][ $newId ] = false;

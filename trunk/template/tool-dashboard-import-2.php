@@ -13,7 +13,7 @@
 						<tr>
 							<td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">Select All</label><input id="cb-select-all-1" checked type="checkbox"></td>
 							<th width="15%">Post Type</th>
-							<th>Update Posts if Field Math</th>
+							<th></th>
 							<th>Convert to Post type...</th>
 							<th width="40%">Taxonomies</th>
 						</tr>
