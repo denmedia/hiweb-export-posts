@@ -175,8 +175,8 @@
 
 
 		public function data(){
-			ini_set('memory_limit', '512M');
-			ini_set('max_execution_time', '180');
+			ini_set( 'memory_limit', '512M' );
+			ini_set( 'max_execution_time', '180' );
 			$R = array(
 				'posts' => array(), 'post_type' => $this->get(), 'taxonomies' => $this->taxonomies(), 'terms' => $this->taxonomy_terms()
 			);
@@ -342,9 +342,77 @@
 		}
 
 
+		private function process_create_terms( $data, $sett ){
+			///CREATE TERMS
+			if( isset( $data['terms'] ) && is_array( $data['terms'] ) ){
+				foreach( $data['terms'] as $taxonomy_name => $terms ){
+					if( $sett['taxonomies'][ $taxonomy_name ] == '' )
+						continue;
+					///REMOVE OLD
+					ksort( $terms );
+					if( isset( $sett['remove'] ) && strtolower( $sett['remove'] ) == 'on' ){
+						$removeTerms = get_terms( array( 'taxonomy' => $sett['taxonomies'][ $taxonomy_name ], 'hide_empty' => false ) );
+						foreach( $removeTerms as $value ){
+							if( $value instanceof WP_Term ){
+								wp_delete_term( $value->term_id, $sett['taxonomies'][ $taxonomy_name ] );
+							}
+						}
+					}
+					///MAKE NEW
+					$termsIds = array();
+					foreach( $terms as $term ){
+						if( trim( $term['parent'] ) != '' && $term['parent'] != '0' ){
+							$parentSlug = $terms[ $term['parent'] ]['slug'];
+							if( isset( $termsIds[ $parentSlug ] ) )
+								$term['parent'] = $termsIds[ $parentSlug ];
+						}
+						$insert_term = wp_insert_term( $term['name'], $sett['taxonomies'][ $taxonomy_name ], array(
+							'description' => $term['description'], 'parent' => $term['parent'], 'slug' => $term['slug']
+						) );
+						if( is_array( $insert_term ) )
+							$termsIds[ $term['slug'] ] = $insert_term['term_id'];
+					}
+				}
+			}
+		}
+
+
+		private function process_insert_post( $post_data, $sett ){
+			$R = array();
+			$post = $post_data['post'];
+			$meta = $post_data['meta'];
+			$tax = $post_data['terms'];
+			///
+			$args = array(
+				'post_content' => $post['post_content'], 'post_excerpt' => $post['post_excerpt'], 'post_name' => $post['post_name'], 'post_status' => $post['post_status'], 'post_title' => $post['post_title'], 'post_type' => $sett['post_type'],
+				'post_date' => $post['post_date'], 'post_date_gmt' => $post['post_date_gmt'], 'post_mime_type' => $post['post_mime_type'], 'post_modified' => $post['post_modified'], 'post_modified_gmt' => $post['post_modified_gmt'],
+				'post_parent' => $post['post_parent'], 'post_password' => $post['post_password'], 'comment_status' => $post['comment_status'], 'filter' => $post['filter'], 'menu_order' => $post['menu_order'],
+				'post_content_filtered' => $post['post_content_filtered']
+			);
+			///
+			$newId = wp_insert_post( $args );
+			/*if( $newId != false ){
+				$R['success'][ $newId ] = array(
+					'post' => $post, 'meta' => $meta, 'tax' => $tax
+				);
+				foreach( $tax as $taxonomy => $terms ){
+					if( isset( $sett['taxonomies'][ $taxonomy ] ) && trim( $sett['taxonomies'][ $taxonomy ] ) != '' ){
+						wp_set_object_terms( $newId, $terms, $sett['taxonomies'][ $taxonomy ] );
+					}
+				}
+				foreach( $meta as $metaKey => $metaValue ){
+					update_post_meta( $newId, $metaKey, $metaValue );
+				}
+			}else{
+				$R['error'][ $newId ] = false;
+			}*/
+			return $newId;
+		}
+
+
 		public function process( $settings ){
-			ini_set('memory_limit', '512M');
-			ini_set('max_execution_time', '180');
+			ini_set( 'memory_limit', '512M' );
+			ini_set( 'max_execution_time', '180' );
 			global $wpdb;
 			$R = array(
 				'success' => array(), 'error' => array(), 'taxonomies' => array(), 'meta' => array()
@@ -364,66 +432,15 @@
 						////////////
 						if( isset( $data['posts'] ) && is_array( $data['posts'] ) ){
 
-							///CREATE TERMS
-							if( isset( $data['terms'] ) && is_array( $data['terms'] ) ){
-								foreach( $data['terms'] as $taxonomy_name => $terms ){
-									if($sett['taxonomies'][ $taxonomy_name ] == '') continue;
-									///REMOVE OLD
-									ksort($terms);
-									if( isset( $sett['remove'] ) && strtolower( $sett['remove'] ) == 'on' ){
-										$removeTerms = get_terms( array( 'taxonomy' => $sett['taxonomies'][ $taxonomy_name ], 'hide_empty' => false ) );
-										foreach( $removeTerms as $value ){
-											if( $value instanceof WP_Term ){
-												wp_delete_term( $value->term_id, $sett['taxonomies'][ $taxonomy_name ] );
-											}
-										}
-									}
-									///MAKE NEW
-									$termsIds = array();
-									foreach( $terms as $term ){
-										if( trim( $term['parent'] ) != '' && $term['parent'] != '0' ){
-											$parentSlug = $terms[ $term['parent'] ]['slug'];
-											if( isset( $termsIds[ $parentSlug ] ) )
-												$term['parent'] = $termsIds[ $parentSlug ];
-										}
-										$insert_term = wp_insert_term( $term['name'], $sett['taxonomies'][ $taxonomy_name ], array(
-											'description' => $term['description'], 'parent' => $term['parent'], 'slug' => $term['slug']
-										) );
-										if( is_array($insert_term) )
-											$termsIds[ $term['slug'] ] = $insert_term['term_id'];
-									}
-								}
-							}
-
+							$this->process_create_terms( $data, $sett );
+							hiweb()->dump()->to_file(hiweb()->path()->size_format(memory_get_usage())); //todo
 							foreach( $data['posts'] as $post_id => $post_data ){
-								$post = $post_data['post'];
-								$meta = $post_data['meta'];
-								$tax = $post_data['terms'];
-								///
-								$args = array(
-									'post_content' => $post['post_content'], 'post_excerpt' => $post['post_excerpt'], 'post_name' => $post['post_name'], 'post_status' => $post['post_status'], 'post_title' => $post['post_title'],
-									'post_type' => $sett['post_type'], 'post_date' => $post['post_date'], 'post_date_gmt' => $post['post_date_gmt'], 'post_mime_type' => $post['post_mime_type'], 'post_modified' => $post['post_modified'],
-									'post_modified_gmt' => $post['post_modified_gmt'], 'post_parent' => $post['post_parent'], 'post_password' => $post['post_password'], 'comment_status' => $post['comment_status'], 'filter' => $post['filter'],
-									'menu_order' => $post['menu_order'], 'post_content_filtered' => $post['post_content_filtered']
-								);
-								///
-								$newId = wp_insert_post( $args );
-								if( $newId != false ){
-									$R['success'][ $newId ] = array(
-										'post' => $post, 'meta' => $meta, 'tax' => $tax
-									);
-									foreach( $tax as $taxonomy => $terms ){
-										if( isset( $sett['taxonomies'][ $taxonomy ] ) && trim( $sett['taxonomies'][ $taxonomy ] ) != '' ){
-											wp_set_object_terms( $newId, $terms, $sett['taxonomies'][ $taxonomy ] );
-										}
-									}
-									foreach( $meta as $metaKey => $metaValue ){
-										update_post_meta( $newId, $metaKey, $metaValue );
-									}
-								}else{
-									$R['error'][ $newId ] = false;
-								}
+								$newId = $this->process_insert_post( $post_data, $sett );
+								if( is_int( $newId ) )
+									$R['success'][] = $newId;else $R['error'][] = $newId;
+								hiweb()->dump()->to_file(hiweb()->path()->size_format(memory_get_usage())); //todo
 							}
+							hiweb()->dump()->to_file(hiweb()->path()->size_format(memory_get_usage())); //todo
 						}
 						////////////
 					}
@@ -534,7 +551,7 @@
 
 
 		public function html(){
-			echo hiweb_export()->html()->select_options_taxonomies($_POST['post_type_name']);
+			echo hiweb_export()->html()->select_options_taxonomies( $_POST['post_type_name'] );
 			wp_die();
 		}
 		

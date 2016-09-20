@@ -2,13 +2,33 @@
 
 	$file = hiweb_export()->file( isset( $_GET['file_data'] ) ? $_GET['file_data'] : ( isset( $_FILES['file_data']['tmp_name'] ) ? $_FILES['file_data']['tmp_name'] : false ) );
 	if( $file->is_exist() ):
+		wp_enqueue_script( 'hiweb-export-posts', plugin_dir_url( dirname( __FILE__ ) ) . '/inc/script.js', array( 'jquery' ), false, true );
 		?>
 		<div class="wrap">
 			<h1><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ) ?>" class="button">←</a> hiWeb Import Tool → Select Post Types and Setup
 				<small>(step 2 of 3)</small>
 			</h1>
 			<div>
-				<form action="<?php echo admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE . '&mod=import&file_data=' . $file->basename() ) ?>" method="post">
+				<div id="import-settings-process" class="postbox hidden" style="text-align: center; padding: 20px 0 100px 0;">
+					<p class="dashicons dashicons-clock" style="font-size: 78px; margin-left: -78px"></p>
+					<h1> Import in process</h1>
+				</div>
+				<div id="import-settings-success" class="postbox hidden" style="text-align: center; padding: 20px 0 100px 0;">
+					<p class="dashicons dashicons-admin-post" style="font-size: 78px; margin-left: -78px"></p>
+					<h1> Done!</h1>
+					<p>Succes added: <b data-result="success"></b></p>
+					<p>Errors: <b data-result="error"></b></p>
+					<p>
+						<a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ) ?>" class="button button-primary">OK</a>
+					</p>
+				</div>
+				<div id="import-settings-error" class="postbox hidden" style="text-align: center; padding: 20px 0 100px 0;">
+					<p class="dashicons dashicons-thumbs-down" style="font-size: 78px; margin-left: -78px"></p>
+					<h1> Error :'</h1>
+					<p><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ).'&file_data='.$file->basename() ?>" class="button button-cancel">Retry...</a>
+					</p>
+				</div>
+				<form id="import-settings-form" action="<?php echo admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE . '&mod=import&file_data=' . $file->basename() ) ?>" method="post">
 
 					<table class="wp-list-table widefat fixed striped pages">
 						<thead>
@@ -16,7 +36,7 @@
 							<td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">Select All</label><input id="cb-select-all-1" checked type="checkbox"></td>
 							<th width="15%">Post Type</th>
 							<th></th>
-							<th>Convert to Post type...</th>
+							<th>Import to Post type...</th>
 							<th width="40%">Taxonomies</th>
 						</tr>
 						</thead>
@@ -81,34 +101,14 @@
 
 					</table>
 					<p>
-						<button type="submit" class="button button-primary button-hero">Import Selected Posts</button>
+						<button id="import-process" type="submit" class="button button-primary button-hero">Import Selected Posts</button>
 					</p>
 				</form>
 			</div>
 		</div>
 		<script>
-			jQuery(document).ready(function ($) {
-				window.history.pushState("", "", 'tools.php?page=<?php echo HW_EXPORT_POSTS_SLUG_PAGE ?>&mod=import&file_data=<?php echo $file->basename() ?>');
-				$('select[data-change="post_type"]').change(function () {
-					var tr = $(this).closest('tr[data-post-type]');
-					var post_type_name = tr.attr('data-post-type');
-					tr.find('select[data-reload="post_type"]').fadeOut();
-					$.ajax({
-						url: ajaxurl,
-						type: 'post',
-						data: {action: 'hw_export_posts_html', post_type_name: tr.find(('select[data-change="post_type"]')).val()},
-						success: function (data) {
-							tr.find('select[data-reload="post_type"]').fadeIn().html(data);
-						},
-						error: function (data) {
-							console.warn(data);
-						},
-						anyway: function () {
-							tr.find('select[data-reload="post_type"]').fadeIn();
-						}
-					});
-				});
-			});
+			window.history.pushState("", "", 'tools.php?page=<?php echo HW_EXPORT_POSTS_SLUG_PAGE ?>&mod=import&file_data=<?php echo $file->basename() ?>');
+			var hiweb_export_ajax = "<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'ajax.php?file_data=' . $file->basename()?>";
 		</script>
 	<?php else: ?>
 		<div class="wrap"><h1>File Error...</h1></div>
