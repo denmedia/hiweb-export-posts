@@ -25,7 +25,7 @@
 				<div id="import-settings-error" class="postbox hidden" style="text-align: center; padding: 20px 0 100px 0;">
 					<p class="dashicons dashicons-thumbs-down" style="font-size: 78px; margin-left: -78px"></p>
 					<h1> Error :'</h1>
-					<p><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ).'&file_data='.$file->basename() ?>" class="button button-cancel">Retry...</a>
+					<p><a href="<?php echo self_admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE ).'&mod=import&file_data='.$file->basename() ?>" class="button button-cancel">Retry...</a>
 					</p>
 				</div>
 				<form id="import-settings-form" action="<?php echo admin_url( 'tools.php?page=' . HW_EXPORT_POSTS_SLUG_PAGE . '&mod=import&file_data=' . $file->basename() ) ?>" method="post">

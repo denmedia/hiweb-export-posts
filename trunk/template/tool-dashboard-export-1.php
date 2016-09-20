@@ -48,8 +48,10 @@
 							?>
 						</td>
 						<td style="text-align: right">
-							<a href="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts&pt=' . $post_type_name ) ?>" class="button button-small" target="_blank">Open JSON</a>
-							<a href="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts_download&pt=' . $post_type_name ) ?>" class="button button-small" target="_blank">Download JSON</a>
+							<!--<a href="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts&pt=' . $post_type_name ) ?>" class="button button-small" target="_blank">Open JSON</a>
+							<a href="<?php echo admin_url( 'admin-ajax.php?action=hw_export_posts_download&pt=' . $post_type_name ) ?>" class="button button-small" target="_blank">Download JSON</a>-->
+							<a href="<?php echo HW_EXPORT_POSTS_URL_AJAX. '?do=open&pt=' . $post_type_name  ?>" class="button button-small" target="_blank">Open JSON</a>
+							<a href="<?php echo HW_EXPORT_POSTS_URL_AJAX. '?do=download&pt=' . $post_type_name  ?>" class="button button-small" target="_blank">Download JSON</a>
 						</td>
 					</tr>
 					<?php

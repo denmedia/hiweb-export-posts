@@ -517,7 +517,7 @@
 			header( 'Content-Type: application/json' );
 			header( 'Content-Length: ' . strlen( $content ) );
 			echo $content;
-			wp_die();
+			die();
 		}
 		
 		
@@ -545,7 +545,7 @@
 			header( 'Pragma: public' );
 			header( 'Content-Length: ' . strlen( $content ) );
 			echo $content;
-			wp_die();
+			die();
 		}
 
 
