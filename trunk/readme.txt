@@ -38,5 +38,5 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 0.4.0.0 - alpha =
+= 0.8.0.0 - alpha =
 Just start develop this AWESOME plugin ))

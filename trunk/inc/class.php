@@ -443,9 +443,8 @@
 						}
 						////////////
 					}
-					return $R;
 				}
-			return false;
+			return $R;
 		}
 
 
