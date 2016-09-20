@@ -391,7 +391,7 @@
 			);
 			///
 			$newId = wp_insert_post( $args );
-			/*if( $newId != false ){
+			if( $newId != false ){
 				$R['success'][ $newId ] = array(
 					'post' => $post, 'meta' => $meta, 'tax' => $tax
 				);
@@ -405,7 +405,7 @@
 				}
 			}else{
 				$R['error'][ $newId ] = false;
-			}*/
+			}
 			return $newId;
 		}
 
@@ -431,16 +431,15 @@
 					if( is_array( $data ) ){
 						////////////
 						if( isset( $data['posts'] ) && is_array( $data['posts'] ) ){
-
+							///Create TERMS
 							$this->process_create_terms( $data, $sett );
-							hiweb()->dump()->to_file(hiweb()->path()->size_format(memory_get_usage())); //todo
 							foreach( $data['posts'] as $post_id => $post_data ){
+								///Insert Post, Terms and Meta
 								$newId = $this->process_insert_post( $post_data, $sett );
+								///
 								if( is_int( $newId ) )
 									$R['success'][] = $newId;else $R['error'][] = $newId;
-								hiweb()->dump()->to_file(hiweb()->path()->size_format(memory_get_usage())); //todo
 							}
-							hiweb()->dump()->to_file(hiweb()->path()->size_format(memory_get_usage())); //todo
 						}
 						////////////
 					}
