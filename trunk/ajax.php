@@ -1,10 +1,4 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: hiweb
-	 * Date: 20.09.2016
-	 * Time: 10:01
-	 */
 
 	if( !isset( $_GET['do'] ) && !isset( $_GET['file_data'] ) ){
 		header( "HTTP/1.0 400 Bad Request" );
@@ -12,23 +6,19 @@
 		echo json_encode( $_POST );
 	}else{
 
+		///BASEDIR
 		function hw_wp_basedir(){
 			$full_path = getcwd();
 			$ar = explode( "wp-", $full_path );
 			return rtrim( $ar[0], '\\/' );
 		}
 
-		//define( WP_PLUGIN_DIR, '' );
-		define( 'WP_DISABLE_PLUGINS', true );
-
-		define( 'WP_USE_THEMES', false );
-
+		///INCLUDE
 		set_include_path( hw_wp_basedir() );
-		require( 'wp-blog-header.php' );
+		require_once 'wp-load.php';
+		require_once 'hiweb-export.php';
 
-		///
-		require 'hiweb-export.php';
-		///
+		///DO ACTION
 		if( isset( $_GET['file_data'] ) ){
 			///File
 			$file = hiweb_export()->file( $_GET['file_data'] );
