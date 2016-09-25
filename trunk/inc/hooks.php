@@ -12,3 +12,4 @@
 	add_action( 'wp_ajax_hw_export_posts', array( hiweb_export()->hooks(), 'posts' ) );
 	add_action( 'wp_ajax_hw_export_posts_html', array( hiweb_export()->hooks(), 'html' ) );
 	add_action( 'wp_ajax_hw_export_posts_download', array( hiweb_export()->hooks(), 'posts_download' ) );
+	add_action( 'wp_ajax_hw_export_posts_import', array( hiweb_export()->hooks(), 'posts_download' ) );

@@ -553,4 +553,9 @@
 			wp_die();
 		}
 		
+		
+		public function import(){
+			
+		}
+		
 	}

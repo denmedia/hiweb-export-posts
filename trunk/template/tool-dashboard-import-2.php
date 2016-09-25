@@ -108,7 +108,6 @@
 		</div>
 		<script>
 			window.history.pushState("", "", 'tools.php?page=<?php echo HW_EXPORT_POSTS_SLUG_PAGE ?>&mod=import&file_data=<?php echo $file->basename() ?>');
-			var hiweb_export_ajax = "<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'ajax.php?file_data=' . $file->basename()?>";
 		</script>
 	<?php else: ?>
 		<div class="wrap"><h1>File Error...</h1></div>
