@@ -9,9 +9,12 @@
 	if( !defined( 'HW_EXPORT_POSTS_DIR' ) )
 		define( 'HW_EXPORT_POSTS_DIR', dirname( dirname( __FILE__ ) ) );
 	if( !defined( 'HW_EXPORT_POSTS_URL_AJAX' ) )
-		define( 'HW_EXPORT_POSTS_URL_AJAX', plugin_dir_url(dirname(__FILE__)).'ajax.php' );
+		//define( 'HW_EXPORT_POSTS_URL_AJAX', plugin_dir_url(dirname(__FILE__)).'ajax.php' );
+		define( 'HW_EXPORT_POSTS_URL_AJAX', admin_url('admin-ajax.php') );
 	if( !defined( 'HW_EXPORT_POSTS_DIR_TEMPLATE' ) )
-		define( 'HW_EXPORT_POSTS_DIR_TEMPLATE', HW_EXPORT_POSTS_DIR . '/template' );
+		define( 'HW_EXPORT_POSTS_DIR_TEMPLATE', HW_EXPORT_POSTS_DIR . '/views' );
+	if( !defined( 'HW_EXPORT_POSTS_DIR_LANGUAGES' ) )
+		define( 'HW_EXPORT_POSTS_DIR_LANGUAGES', basename(HW_EXPORT_POSTS_DIR) . '/languages' );
 	if( !defined( 'HW_EXPORT_POSTS_SLUG_PAGE' ) )
 		define( 'HW_EXPORT_POSTS_SLUG_PAGE', 'hiweb-export-posts' );
 	if( !defined( 'HW_EXPORT_POSTS_DIR_UPLOAD' ) ){

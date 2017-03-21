@@ -1,6 +1,6 @@
 <?php
-	
-	
+
+
 	/**
 	 * Created by PhpStorm.
 	 * User: hiweb
@@ -11,11 +11,12 @@
 
 		/** @var hw_export_post_type[] */
 		private $post_types = array();
-		
+
 		public $post_types_args = array(
-			'public' => true, '_builtin' => false
+			'public' => true,
+			'_builtin' => false
 		);
-		
+
 
 		/**
 		 * @return hw_export_hooks
@@ -79,21 +80,21 @@
 			}
 			return $class;
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 	class hw_export_post_type{
-		
+
 		private $post_type;
-		
+
 		private $export_taxonomy = true;
 		private $export_meta = true;
 		/** @var null|WP_Post_Type */
 		private $object;
-		
-		
+
+
 		public function __construct( $post_type ){
 			$this->post_type = $post_type;
 			if( $this->is_exist() )
@@ -152,7 +153,8 @@
 			if( is_array( $taxonomy_object ) )
 				foreach( $taxonomy_object as $taxonomy_name => $taxonomy ){
 					$term_args = array(
-						'taxonomy' => $taxonomy_name, 'hide_empty' => false,
+						'taxonomy' => $taxonomy_name,
+						'hide_empty' => false,
 					);
 					$terms = get_terms( $term_args );
 					if( is_array( $terms ) )
@@ -178,16 +180,22 @@
 			ini_set( 'memory_limit', '512M' );
 			ini_set( 'max_execution_time', '180' );
 			$R = array(
-				'posts' => array(), 'post_type' => $this->get(), 'taxonomies' => $this->taxonomies(), 'terms' => $this->taxonomy_terms()
+				'posts' => array(),
+				'post_type' => $this->get(),
+				'taxonomies' => $this->taxonomies(),
+				'terms' => $this->taxonomy_terms()
 			);
 			if( $this->is_exist() ){
 				$posts = get_posts( array(
-					'posts_per_page' => - 1, 'post_type' => $this->post_type
+					'posts_per_page' => - 1,
+					'post_type' => $this->post_type
 				) );
 				if( is_array( $posts ) )
 					foreach( $posts as $post ){
 						$R['posts'][ $post->ID ] = array(
-							'post' => $post, 'meta' => array(), 'terms' => array()
+							'post' => $post,
+							'meta' => array(),
+							'terms' => array()
 						);
 						///META
 						$meta = get_post_meta( $post->ID );
@@ -210,7 +218,7 @@
 			}
 			return $R;
 		}
-		
+
 	}
 
 
@@ -228,7 +236,7 @@
 			if( $this->is_exist() ){
 				if( strpos( $filepath, HW_EXPORT_POSTS_DIR_UPLOAD ) === false ){
 					wp_mkdir_p( HW_EXPORT_POSTS_DIR_UPLOAD );
-					$newPath = HW_EXPORT_POSTS_DIR_UPLOAD . '/' . microtime( true ) . '.json';
+					$newPath = HW_EXPORT_POSTS_DIR_UPLOAD . '/' . date("Y-m-d.H-i-s",microtime(true)) . '.json';
 					if( copy( $filepath, $newPath ) ){
 						$this->path = $newPath;
 					}
@@ -282,7 +290,7 @@
 		public function post_type_data( $post_type ){
 			if( !isset( $this->data[ $post_type ] ) )
 				return false;
-			
+
 			return $this->data[ $post_type ];
 		}
 
@@ -367,7 +375,9 @@
 								$term['parent'] = $termsIds[ $parentSlug ];
 						}
 						$insert_term = wp_insert_term( $term['name'], $sett['taxonomies'][ $taxonomy_name ], array(
-							'description' => $term['description'], 'parent' => $term['parent'], 'slug' => $term['slug']
+							'description' => $term['description'],
+							'parent' => $term['parent'],
+							'slug' => $term['slug']
 						) );
 						if( is_array( $insert_term ) )
 							$termsIds[ $term['slug'] ] = $insert_term['term_id'];
@@ -384,16 +394,31 @@
 			$tax = $post_data['terms'];
 			///
 			$args = array(
-				'post_content' => $post['post_content'], 'post_excerpt' => $post['post_excerpt'], 'post_name' => $post['post_name'], 'post_status' => $post['post_status'], 'post_title' => $post['post_title'], 'post_type' => $sett['post_type'],
-				'post_date' => $post['post_date'], 'post_date_gmt' => $post['post_date_gmt'], 'post_mime_type' => $post['post_mime_type'], 'post_modified' => $post['post_modified'], 'post_modified_gmt' => $post['post_modified_gmt'],
-				'post_parent' => $post['post_parent'], 'post_password' => $post['post_password'], 'comment_status' => $post['comment_status'], 'filter' => $post['filter'], 'menu_order' => $post['menu_order'],
+				'post_content' => $post['post_content'],
+				'post_excerpt' => $post['post_excerpt'],
+				'post_name' => $post['post_name'],
+				'post_status' => $post['post_status'],
+				'post_title' => $post['post_title'],
+				'post_type' => $sett['post_type'],
+				'post_date' => $post['post_date'],
+				'post_date_gmt' => $post['post_date_gmt'],
+				'post_mime_type' => $post['post_mime_type'],
+				'post_modified' => $post['post_modified'],
+				'post_modified_gmt' => $post['post_modified_gmt'],
+				'post_parent' => $post['post_parent'],
+				'post_password' => $post['post_password'],
+				'comment_status' => $post['comment_status'],
+				'filter' => $post['filter'],
+				'menu_order' => $post['menu_order'],
 				'post_content_filtered' => $post['post_content_filtered']
 			);
 			///
 			$newId = wp_insert_post( $args );
 			if( $newId != false ){
 				$R['success'][ $newId ] = array(
-					'post' => $post, 'meta' => $meta, 'tax' => $tax
+					'post' => $post,
+					'meta' => $meta,
+					'tax' => $tax
 				);
 				foreach( $tax as $taxonomy => $terms ){
 					if( isset( $sett['taxonomies'][ $taxonomy ] ) && trim( $sett['taxonomies'][ $taxonomy ] ) != '' ){
@@ -403,7 +428,7 @@
 				foreach( $meta as $metaKey => $metaValue ){
 					update_post_meta( $newId, $metaKey, $metaValue );
 				}
-			}else{
+			} else {
 				$R['error'][ $newId ] = false;
 			}
 			return $newId;
@@ -415,7 +440,10 @@
 			ini_set( 'max_execution_time', '180' );
 			global $wpdb;
 			$R = array(
-				'success' => array(), 'error' => array(), 'taxonomies' => array(), 'meta' => array()
+				'success' => array(),
+				'error' => array(),
+				'taxonomies' => array(),
+				'meta' => array()
 			);
 			if( is_array( $settings ) && isset( $settings['pt'] ) && isset( $settings['pts'] ) && is_array( $settings['pts'] ) )
 				foreach( $settings['pt'] as $pt ){
@@ -438,7 +466,7 @@
 								$newId = $this->process_insert_post( $post_data, $sett );
 								///
 								if( is_int( $newId ) )
-									$R['success'][] = $newId;else $R['error'][] = $newId;
+									$R['success'][] = $newId; else $R['error'][] = $newId;
 							}
 						}
 						////////////
@@ -464,15 +492,15 @@
 		}
 
 	}
-	
-	
+
+
 	class hw_export_hooks{
-		
+
 		public function admin_menu(){
 			add_submenu_page( 'tools.php', 'hiWeb Export Post', 'hiWeb Export / Import', 'publish_posts', HW_EXPORT_POSTS_SLUG_PAGE, array( $this, 'dashboard' ) );
 		}
-		
-		
+
+
 		public function dashboard(){
 			if( !isset( $_GET['mod'] ) ){
 				include_once HW_EXPORT_POSTS_DIR_TEMPLATE . '/tool-dashboard-1.php';
@@ -485,9 +513,9 @@
 				case 'import':
 					if( count( $_POST ) == 0 && ( isset( $_FILES['file_data'] ) || isset( $_GET['file_data'] ) ) ){
 						include HW_EXPORT_POSTS_DIR_TEMPLATE . '/tool-dashboard-import-2.php';
-					}elseif( count( $_POST ) > 0 ){
+					} elseif( count( $_POST ) > 0 ) {
 						include HW_EXPORT_POSTS_DIR_TEMPLATE . '/tool-dashboard-import-3.php';
-					}else{
+					} else {
 						include HW_EXPORT_POSTS_DIR_TEMPLATE . '/tool-dashboard-import-1.php';
 					}
 					break;
@@ -505,7 +533,7 @@
 			if( isset( $_GET['pt'] ) && !is_array( $_GET['pt'] ) ){
 				$post_type = hiweb_export()->post_type( $_GET['pt'] );
 				$R[ $post_type->type() ] = $post_type->data();
-			}elseif( !isset( $_POST['pt'] ) || is_array( $_POST['pt'] ) ){
+			} elseif( !isset( $_POST['pt'] ) || is_array( $_POST['pt'] ) ) {
 				$post_types = hiweb_export()->post_types( $_POST['pt'] );
 				foreach( $post_types as $post_type ){
 					$R[ $post_type->type() ] = $post_type->data();
@@ -518,14 +546,14 @@
 			echo $content;
 			die();
 		}
-		
-		
+
+
 		public function posts_download(){
 			$R = array();
 			if( isset( $_GET['pt'] ) && !is_array( $_GET['pt'] ) ){
 				$post_type = hiweb_export()->post_type( $_GET['pt'] );
 				$R[ $post_type->type() ] = $post_type->data();
-			}elseif( !isset( $_POST['pt'] ) || is_array( $_POST['pt'] ) ){
+			} elseif( !isset( $_POST['pt'] ) || is_array( $_POST['pt'] ) ) {
 				$post_types = hiweb_export()->post_types( $_POST['pt'] );
 				foreach( $post_types as $post_type ){
 					$R[ $post_type->type() ] = $post_type->data();
@@ -536,7 +564,7 @@
 			header( 'Content-Description: File Transfer' );
 			header( 'Content-Type: application/octet-stream' );
 			header( 'Content-Type: application/json' );
-			header( 'Content-Disposition: attachment; filename=' . implode( '-', array_keys( $R ) ) . '.json' );
+			header( 'Content-Disposition: attachment; filename=' . implode( '-', array_keys( $R ) ) . '.'.date("Y-m-d.H-i-s",microtime(true)). '.json' );
 			header( 'Content-Transfer-Encoding: binary' );
 			header( 'Connection: Keep-Alive' );
 			header( 'Expires: 0' );
@@ -552,5 +580,18 @@
 			echo hiweb_export()->html()->select_options_taxonomies( $_POST['post_type_name'] );
 			wp_die();
 		}
-		
+
+
+		public function plugin_action_links( $actions, $plugin_file, $plugin_data, $context ){
+			if( $plugin_file == 'hiweb-export-posts/hiweb-export.php' ){
+				$actions['hw_dashboard'] = '<a href="' . admin_url( 'tools.php?page=hiweb-export-posts' ) . '" aria-label="' . __( 'Open Dashboard for Export', 'hw_export_posts' ) . '">'.__('Export Dashboard','hw_export_posts').'</a>';
+			}
+			return $actions;
+		}
+
+
+		public function load_textdomain(){
+			$B =  load_plugin_textdomain( 'hw_export_posts', false, HW_EXPORT_POSTS_DIR_LANGUAGES );
+		}
+
 	}

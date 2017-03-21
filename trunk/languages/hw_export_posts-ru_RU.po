@@ -1,0 +1,131 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: hiWeb Export Posts\n"
+"POT-Creation-Date: 2017-03-21 16:24+0300\n"
+"PO-Revision-Date: 2017-03-21 16:27+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: hiweb-export.php\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: inc/class.php:587
+msgid "Open Dashboard for Export"
+msgstr "Открыть панель Экспорта"
+
+#: inc/class.php:587
+msgid "Export Dashboard"
+msgstr "Панель Экспорта"
+
+#: views/tool-dashboard-1.php:2
+msgid "hiWeb Export / Import Posts Tool"
+msgstr "hiWeb Экспорт / Импорт записей"
+
+#: views/tool-dashboard-1.php:3
+msgid "Choose what you want to do..."
+msgstr "Выберите нужное действие..."
+
+#: views/tool-dashboard-1.php:4
+msgid "Export to JSON file"
+msgstr "Экспорт JSON файла"
+
+#: views/tool-dashboard-1.php:5
+msgid "Import from JSON file"
+msgstr "Импорт из JSON файла"
+
+#: views/tool-dashboard-1.php:7
+msgid "Upload previously files"
+msgstr "Загрузить ранее использованный файл"
+
+#: views/tool-dashboard-export-1.php:2
+msgid "hiWeb Export Tool → Select Posts for Export"
+msgstr "hiWeb Инструмент Экспорта → Выбор Записей для Экспорта"
+
+#: views/tool-dashboard-export-1.php:3
+msgid "Select Post Types For Export..."
+msgstr "Выберите Типы Записей для Экспорта"
+
+#: views/tool-dashboard-export-1.php:8 views/tool-dashboard-export-1.php:63
+msgid "Select All"
+msgstr "Выбрать Все"
+
+#: views/tool-dashboard-export-1.php:9
+msgid "Post Type"
+msgstr "Тип Записи"
+
+#: views/tool-dashboard-export-1.php:10
+msgid "Posts Count"
+msgstr "Кол-во Записей"
+
+#: views/tool-dashboard-export-1.php:11
+msgid "Taxonomies"
+msgstr "Таксономии"
+
+#: views/tool-dashboard-export-1.php:52
+msgid "Open JSON"
+msgstr "Открыть JSON"
+
+#: views/tool-dashboard-export-1.php:53
+msgid "Download JSON"
+msgstr "Скачать JSON"
+
+#: views/tool-dashboard-export-1.php:73
+msgid "Export All Selected Posts"
+msgstr "Экспортировать Все Выделенные Записи"
+
+#: views/tool-dashboard-import-1.php:2
+msgid "hiWeb Import Tool → Select Data File"
+msgstr "hiWeb инструмент импорта → Выбор Файла с Данными"
+
+#: views/tool-dashboard-import-1.php:2
+msgid "(step 1 of 3)"
+msgstr "(шаг 1 из 3)"
+
+#: views/tool-dashboard-import-1.php:5
+msgid "Select Already Uploaded file"
+msgstr "Выберите Ранее Загруженный JSON файл"
+
+#: views/tool-dashboard-import-1.php:6
+msgid "or Upload export JSON file:"
+msgstr "или Загрузите JSON файл экспорта"
+
+#: views/tool-dashboard-import-1.php:7
+msgid ""
+"After upload file you must select where (wath post type) you want import "
+"posts"
+msgstr ""
+"После удачной загрузки файла Вы должны выбрать какой тип поста хотите "
+"импортировать"
+
+#: views/tool-dashboard-import-1.php:9
+msgid "Upload"
+msgstr "Загрузить"
+
+#. Plugin Name of the plugin/theme
+msgid "hiWeb Export Posts"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Export Selected Posts in to JSON file and Import in to other WordPress Site."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Den Media"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://hiweb.moscow"
+msgstr ""
