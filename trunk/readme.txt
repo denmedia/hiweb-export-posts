@@ -38,5 +38,8 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.9.0.0 =
+Add locations, fix wrong urls...
+
 = 0.8.0.0 - alpha =
 Just start develop this AWESOME plugin ))
